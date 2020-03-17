@@ -1,7 +1,6 @@
 import path from 'path'
 import webpack from 'webpack'
-import rimraf from 'rimraf'
-import { browser } from '../webpack'
+import { browser } from './webpack'
 import WebpackBar from 'webpackbar'
 // eslint-disable-next-line
 const VisualizerPlugin = require('webpack-visualizer-plugin')
@@ -12,7 +11,7 @@ const config: Array<webpack.Configuration> = [
   {
     ...browser,
     mode: 'production',
-    entry: path.resolve('src/web/index.tsx'),
+    entry: path.resolve('src/index.tsx'),
     output: {
       path: distWeb,
       filename: 'index.js',
@@ -29,7 +28,7 @@ const config: Array<webpack.Configuration> = [
     ...browser,
     target: 'webworker',
     mode: 'production',
-    entry: path.resolve('src/web/worker.js'),
+    entry: path.resolve('src/worker.js'),
     output: {
       path: distWeb,
       filename: 'worker.js',

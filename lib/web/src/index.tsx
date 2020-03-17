@@ -5,8 +5,6 @@
 import { h, hydrate } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
 
-import { SourcePanel } from './source'
-import { ResultPanel } from './result'
 import { Result } from './type'
 
 declare global {
