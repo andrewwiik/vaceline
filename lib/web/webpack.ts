@@ -1,6 +1,7 @@
-import path from 'path'
+import * as path from 'path'
 import webpack from 'webpack'
-import * as browser from './webpack/browser'
+const merge = require('webpack-merge')
+import { browser } from './webpack/browser'
 import WebpackBar from 'webpackbar'
 // eslint-disable-next-line
 const VisualizerPlugin = require('webpack-visualizer-plugin')
@@ -8,8 +9,7 @@ const VisualizerPlugin = require('webpack-visualizer-plugin')
 const distWeb = path.resolve('public/dist')
 
 const config: Array<webpack.Configuration> = [
-  {
-    ...browser,
+  merge(browser, {
     mode: 'production',
     entry: path.resolve('src/index.tsx'),
     output: {
@@ -23,9 +23,8 @@ const config: Array<webpack.Configuration> = [
         color: 'green',
       }),
     ],
-  },
-  {
-    ...browser,
+  }),
+  merge(browser, {
     target: 'webworker',
     mode: 'production',
     entry: path.resolve('src/worker.js'),
@@ -39,7 +38,7 @@ const config: Array<webpack.Configuration> = [
         color: 'darkgreen',
       }),
     ],
-  },
+  }),
 ]
 
 const compiler = webpack(config)

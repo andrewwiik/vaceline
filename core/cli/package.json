@@ -24,5 +24,8 @@
   },
   "bugs": {
     "url": "https://github.com/azarashd/vacel/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^13.9.1"
   }
 }
