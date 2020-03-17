@@ -1,4 +1,4 @@
-import { Tokenizer } from '../../src/parser/tokenizer'
+import { Tokenizer } from '../../core/parser/tokenizer'
 import chalk from 'chalk'
 
 // for test readability

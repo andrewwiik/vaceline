@@ -1,5 +1,5 @@
-import { Parser } from '..'
-import { Stack } from '.'
+import { Parser } from '../../parser'
+import { Stack } from '../expression'
 import { d, b, NodeWithLoc, BaseNode } from '../../nodes'
 import * as ops from '../tokenizer/operators'
 import { Token } from '../tokenizer'

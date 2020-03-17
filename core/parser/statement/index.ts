@@ -3,7 +3,7 @@ import { isToken } from '../../utils/token'
 
 import { parseExpr } from '../expression'
 import { createError } from '../create-error'
-import { Parser } from '..'
+import { Parser } from '../../parser'
 import { keywords, returnActions } from '../keywords'
 import { parseIp } from './ip'
 import { Token } from '../tokenizer'

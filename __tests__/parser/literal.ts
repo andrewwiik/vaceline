@@ -1,5 +1,5 @@
-import { parseLiteral } from '../../src/parser/literal'
-import { Parser } from '../../src/parser'
+import { parseLiteral } from '../../core/parser/literal'
+import { Parser } from '../../core/parser'
 
 describe('Literal', () => {
   const parseExpr = (source: string) => parseLiteral(new Parser(source))

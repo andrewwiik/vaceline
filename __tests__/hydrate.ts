@@ -1,9 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 
-import { parse } from '../src'
-import { hydrate } from '../src/hydrate'
-import { BaseNode } from '../src/nodes'
+import { parse } from '../core'
+import { hydrate } from '../core/hydrate'
+import { BaseNode } from '../core/nodes'
 
 describe('hydrate', () => {
   const code = fs.readFileSync(

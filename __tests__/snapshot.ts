@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { parse } from '../src'
+import { parse } from '../core'
 
 describe('hydrate', () => {
   const codePath = path.resolve('__tests__/__fixture__/rough.vcl')

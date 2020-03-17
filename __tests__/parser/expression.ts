@@ -1,6 +1,6 @@
-import { Parser } from '../../src/parser'
-import { parseExpr } from '../../src/parser/expression/index'
-import { d } from '../../src/nodes'
+import { Parser } from '../../core/parser'
+import { parseExpr } from '../../core/parser/expression/index'
+import { d } from '../../core/nodes'
 
 const parse = (source: string) => parseExpr(new Parser(source))
 

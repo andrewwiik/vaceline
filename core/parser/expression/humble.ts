@@ -1,10 +1,10 @@
-import { Parser } from '..'
+import { Parser } from '../../parser'
 import { d, b, NodeWithLoc, Location } from '../../nodes'
 import { Token } from '../tokenizer'
 import { isToken } from '../../utils/token'
 import { createError } from '../create-error'
 import { parseLiteral } from '../literal'
-import { parseExpr } from '.'
+import { parseExpr } from '../expression'
 import { parseCompound } from '../compound'
 import { parseIdentifier } from './identifier'
 

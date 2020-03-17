@@ -2,7 +2,7 @@ import { d, b, NodeWithLoc } from '../../nodes'
 import { isToken } from '../../utils/token'
 
 import { Token } from '../tokenizer'
-import { Parser } from '..'
+import { Parser } from '../../parser'
 import { parseOperatorExpr } from './operator'
 import { parseHumbleExpr } from './humble'
 

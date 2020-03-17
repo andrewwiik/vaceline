@@ -2,7 +2,7 @@ import { Doc } from 'prettier'
 
 import { Node as UnionNode } from './defs'
 import { State, printNode } from '../generator/printAST'
-import { NodeType } from '.'
+import { NodeType } from '../nodes'
 import { Nodes } from './nodes.gen'
 
 export interface Position {

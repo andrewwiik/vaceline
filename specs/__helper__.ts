@@ -3,13 +3,13 @@ import * as fs from 'fs'
 import { wrap as wrapRaw } from 'jest-snapshot-serializer-raw'
 import stripAnsi from 'strip-ansi'
 
-import { parse as parseNode } from '../src'
-import { Parser } from '../src/parser'
-import { parseExpr } from '../src/parser/expression/index'
-import { parseStmt } from '../src/parser/statement'
-import { generate } from '../src/lib'
-import { Node } from '../src/nodes/defs'
-import { Tokenizer } from '../src/parser/tokenizer'
+import { parse as parseNode } from '../core'
+import { Parser } from '../core/parser'
+import { parseExpr } from '../core/parser/expression/index'
+import { parseStmt } from '../core/parser/statement'
+import { generate } from '../core/lib'
+import { Node } from '../core/nodes/defs'
+import { Tokenizer } from '../core/parser/tokenizer'
 
 type Parse = (source: string) => Node
 

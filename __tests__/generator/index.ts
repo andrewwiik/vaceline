@@ -1,9 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 
-import { generate } from '../../src/generator'
-import { parse } from '../../src'
-import { getJoinedRegExp } from '../../src/parser/tokenizer'
+import { generate } from '../../core/generator'
+import { parse } from '../../core'
+import { getJoinedRegExp } from '../../core/parser/tokenizer'
 
 const splitters = [
   /* spaces         */ / +/,

@@ -1,4 +1,4 @@
-import { createError } from '../../src/parser/create-error'
+import { createError } from '../../core/parser/create-error'
 
 describe('createError', () => {
   //   const shortSource = `

@@ -1,4 +1,4 @@
-import { Parser } from '..'
+import { Parser } from '../../parser'
 import { d, b, NodeWithLoc } from '../../nodes'
 import { Token } from '../tokenizer'
 import { isToken } from '../../utils/token'

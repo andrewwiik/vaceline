@@ -2,7 +2,7 @@ import { d, b, Location, NodeWithLoc } from '../nodes'
 
 import { Token } from './tokenizer'
 import { createError } from './create-error'
-import { Parser } from '.'
+import { Parser } from '../parser'
 import { isToken } from '../utils/token'
 import { parseIp } from './statement/ip'
 

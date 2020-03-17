@@ -1,7 +1,7 @@
-import { Parser } from '../../src/parser'
-import { d } from '../../src/nodes'
-import { parseStmt } from '../../src/parser/statement/index'
-import { parseIp } from '../../src/parser/statement/ip'
+import { Parser } from '../../core/parser'
+import { d } from '../../core/nodes'
+import { parseStmt } from '../../core/parser/statement/index'
+import { parseIp } from '../../core/parser/statement/ip'
 
 const parse = (source: string) => parseStmt(new Parser(source.trim()))
 

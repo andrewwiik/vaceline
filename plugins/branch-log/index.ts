@@ -1,5 +1,5 @@
-import { traverse } from '../../src/lib'
-import { d } from '../../src/nodes'
+import { traverse } from '../../core/lib'
+import { d } from '../../core/nodes'
 import {
   buildMember,
   buildIdentifier,
@@ -8,8 +8,8 @@ import {
   buildAddStatement,
   buildFunCallExpression,
   buildExpressionStatement,
-} from '../../src/nodes/builders.gen'
-import { Node } from '../../src/nodes/defs'
+} from '../../core/nodes/builders.gen'
+import { Node } from '../../core/nodes/defs'
 
 // req.http.Vaceline-Branch-Log
 const varBranchLog = buildMember(

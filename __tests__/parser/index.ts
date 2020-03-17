@@ -1,4 +1,4 @@
-import { parse } from '../../src'
+import { parse } from '../../core'
 
 describe('Parser', () => {
   describe('Program', () => {

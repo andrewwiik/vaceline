@@ -23,10 +23,10 @@ const project = new Project({
   // Read more: https://ts-morph.com/setup/
 })
 
-project.addSourceFileAtPath(path.resolve('src/nodes/defs.ts'))
+project.addSourceFileAtPath(path.resolve('core/nodes/defs.ts'))
 
 const definitionsFile = project.getSourceFileOrThrow(
-  path.resolve('src/nodes/defs.ts')
+  path.resolve('core/nodes/defs.ts')
 )
 
 const defs = definitionsFile.getInterfaces()

@@ -1,4 +1,4 @@
-import { Parser } from '..'
+import { Parser } from '../../parser'
 import { isToken } from '../../utils/token'
 import isIp from 'is-ip'
 import { createError } from '../create-error'
