@@ -1,6 +1,6 @@
 *.log
 node_modules
 coverage
-/dist
+**/dist
 /public/dist
 /sandbox

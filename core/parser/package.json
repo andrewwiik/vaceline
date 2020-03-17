@@ -1,5 +1,5 @@
 {
-  "name": "@vaceline/cli",
+  "name": "@vaceline/parser",
   "version": "0.0.1",
   "description": "> TODO: description",
   "author": {
@@ -19,7 +19,8 @@
     "url": "git+https://github.com/shqld/vaceline.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "babel src -d dist -x .ts,.js --delete-dir-on-start"
   },
   "bugs": {
     "url": "https://github.com/azarashd/vacel/issues"
