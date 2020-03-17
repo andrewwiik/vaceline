@@ -6,6 +6,8 @@ import { h, hydrate } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
 
 import { Result } from './type'
+import { SourcePanel } from './source'
+import { ResultPanel } from './result'
 
 declare global {
   function requestIdleCallback(): void

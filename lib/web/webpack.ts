@@ -1,6 +1,6 @@
 import path from 'path'
 import webpack from 'webpack'
-import { browser } from './webpack'
+import * as browser from './webpack/browser'
 import WebpackBar from 'webpackbar'
 // eslint-disable-next-line
 const VisualizerPlugin = require('webpack-visualizer-plugin')
