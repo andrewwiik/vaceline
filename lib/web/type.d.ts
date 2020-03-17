@@ -1,4 +1,4 @@
-import { BaseNode } from '../nodes'
+import { BaseNode } from '../../core/nodes'
 
 export type Result =
   | { type: 'success'; code: string; ast: BaseNode }
