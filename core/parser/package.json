@@ -1,0 +1,27 @@
+{
+  "name": "@vaceline/cli",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": {
+    "name": "Sho Miyamoto",
+    "email": "me@shomiyamoto.dev",
+    "url": "https://github.com/shqld"
+  },
+  "homepage": "https://github.com/shqld/vaceline#readme",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "src/index.ts",
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shqld/vaceline.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/azarashd/vacel/issues"
+  }
+}

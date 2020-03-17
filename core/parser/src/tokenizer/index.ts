@@ -1,7 +1,7 @@
 import { createError } from '../create-error'
-import { Location } from '../../nodes'
+import { Location } from '../../../nodes/src'
 import { operators } from './operators'
-import { buildDebug } from '../../utils/debug'
+import { buildDebug } from '../../../utils/src/debug'
 
 const debug = buildDebug('tokenize')
 const debugToken = debug.extend('token')

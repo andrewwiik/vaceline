@@ -1,8 +1,8 @@
-import { d, b, NodeWithLoc } from '../../nodes'
-import { isToken } from '../../utils/token'
+import { d, b, NodeWithLoc } from '../../../nodes/src'
+import { isToken } from '../../../utils/src/token'
 
 import { Token } from '../tokenizer'
-import { Parser } from '../../parser'
+import { Parser } from '..'
 import { parseOperatorExpr } from './operator'
 import { parseHumbleExpr } from './humble'
 

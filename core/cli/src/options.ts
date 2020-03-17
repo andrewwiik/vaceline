@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import yargs from 'yargs'
 import assert from 'assert'
-import { GenerateOptions } from '../generator'
+import { GenerateOptions } from '../../generator/src'
 
 export type CliOptions = GenerateOptions & {
   source: string

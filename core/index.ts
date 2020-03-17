@@ -7,8 +7,8 @@ import {
   generate,
   // traverse,
 } from './lib'
-import { d } from './nodes'
-import { GenerateOptions } from './generator'
+import { d } from './nodes/src'
+import { GenerateOptions } from './generator/src'
 
 interface TransformResult {
   code: string

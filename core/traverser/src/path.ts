@@ -1,4 +1,4 @@
-import { BaseNode } from '../nodes'
+import { BaseNode } from '../../nodes/src'
 
 export interface Handler {
   entry?(path: NodePath<BaseNode>): void

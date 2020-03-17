@@ -1,8 +1,8 @@
-import { Parser } from '../../parser'
-import { isToken } from '../../utils/token'
+import { Parser } from '../../../parser/src'
+import { isToken } from '../../../utils/src/token'
 import isIp from 'is-ip'
 import { createError } from '../create-error'
-import { b } from '../../nodes'
+import { b } from '../../../nodes/src'
 
 export const parseIp = (p: Parser, token = p.read()) => {
   // TODO: We can know what Ip addresses look like and detect them

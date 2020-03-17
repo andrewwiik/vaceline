@@ -1,7 +1,7 @@
-import { Parser } from '../../parser'
-import { d, b, NodeWithLoc } from '../../nodes'
+import { Parser } from '..'
+import { d, b, NodeWithLoc } from '../../../nodes/src'
 import { Token } from '../tokenizer'
-import { isToken } from '../../utils/token'
+import { isToken } from '../../../utils/src/token'
 
 export const parseIdentifier = (
   p: Parser,

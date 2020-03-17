@@ -3,7 +3,7 @@ import path from 'path'
 
 import { parse } from '../core'
 import { hydrate } from '../core/hydrate'
-import { BaseNode } from '../core/nodes'
+import { BaseNode } from '../core/nodes/src'
 
 describe('hydrate', () => {
   const code = fs.readFileSync(

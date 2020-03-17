@@ -1,4 +1,4 @@
-import { BaseNode } from '../nodes'
+import { BaseNode } from '../../nodes/src'
 import { NodePath, TraversalContext, Handler } from './path'
 
 export const traverseNode = (

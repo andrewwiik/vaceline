@@ -1,6 +1,6 @@
-import { Parser } from '../parser'
+import { Parser } from '../../parser/src'
 import { Token } from './tokenizer'
-import { isToken } from '../utils/token'
+import { isToken } from '../../utils/src/token'
 
 export const parseCompound = <T>(
   p: Parser,

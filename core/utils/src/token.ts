@@ -1,4 +1,4 @@
-import { Token, TokenType } from '../parser/tokenizer'
+import { Token, TokenType } from '../../parser/src/tokenizer'
 
 export const isToken = <
   Type extends TokenType,

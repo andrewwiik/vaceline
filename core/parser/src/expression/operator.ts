@@ -1,9 +1,9 @@
-import { Parser } from '../../parser'
-import { Stack } from '../expression'
-import { d, b, NodeWithLoc, BaseNode } from '../../nodes'
+import { Parser } from '..'
+import { Stack } from '.'
+import { d, b, NodeWithLoc, BaseNode } from '../../../nodes/src'
 import * as ops from '../tokenizer/operators'
 import { Token } from '../tokenizer'
-import { isToken } from '../../utils/token'
+import { isToken } from '../../../utils/src/token'
 import { parseHumbleExpr } from './humble'
 
 export const parseOperatorExpr = (

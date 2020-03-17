@@ -1,7 +1,7 @@
 import { parse, traverse, generate } from '../../core/lib'
 import BranchLogPlugin from '../branch-log'
-import { NodePath } from '../../core/traverser/path'
-import { d } from '../../core/nodes'
+import { NodePath } from '../../core/traverser/src/path'
+import { d } from '../../core/nodes/src'
 
 const code = `
 

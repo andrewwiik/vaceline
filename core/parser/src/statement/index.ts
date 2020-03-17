@@ -1,9 +1,9 @@
-import { d, b, Location } from '../../nodes'
-import { isToken } from '../../utils/token'
+import { d, b, Location } from '../../../nodes/src'
+import { isToken } from '../../../utils/src/token'
 
 import { parseExpr } from '../expression'
 import { createError } from '../create-error'
-import { Parser } from '../../parser'
+import { Parser } from '../../../parser/src'
 import { keywords, returnActions } from '../keywords'
 import { parseIp } from './ip'
 import { Token } from '../tokenizer'

@@ -1,5 +1,5 @@
-import * as chalk from '../utils/chalk'
-import { Position } from '../nodes'
+import * as chalk from '../../utils/src/chalk'
+import { Position } from '../../nodes/src'
 
 const MARGIN = 2
 const HORIZONTAL_MARK = '> '

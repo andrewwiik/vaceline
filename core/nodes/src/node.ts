@@ -1,9 +1,9 @@
 import { Doc } from 'prettier'
 
-import { Node as UnionNode } from './src/defs'
-import { State, printNode } from '../generator/src/printAST'
-import { NodeType } from '../nodes/src'
-import { Nodes } from './src/nodes.gen'
+import { Node as UnionNode } from './defs'
+import { State, printNode } from '../../generator/src/printAST'
+import { NodeType } from '../../nodes/src'
+import { Nodes } from './nodes.gen'
 
 export interface Position {
   offset: number

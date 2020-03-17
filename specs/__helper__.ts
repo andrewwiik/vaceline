@@ -4,12 +4,12 @@ import { wrap as wrapRaw } from 'jest-snapshot-serializer-raw'
 import stripAnsi from 'strip-ansi'
 
 import { parse as parseNode } from '../core'
-import { Parser } from '../core/parser'
-import { parseExpr } from '../core/parser/expression/index'
-import { parseStmt } from '../core/parser/statement'
+import { Parser } from '../core/parser/src'
+import { parseExpr } from '../core/parser/src/expression/index'
+import { parseStmt } from '../core/parser/src/statement'
 import { generate } from '../core/lib'
-import { Node } from '../core/nodes/defs'
-import { Tokenizer } from '../core/parser/tokenizer'
+import { Node } from '../core/nodes/src/defs'
+import { Tokenizer } from '../core/parser/src/tokenizer'
 
 type Parse = (source: string) => Node
 

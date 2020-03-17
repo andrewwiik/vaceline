@@ -1,13 +1,13 @@
 import { Tokenizer, Token, TokenType } from './tokenizer'
-import { d, Nodes, NodeWithLoc, Location, NodeType } from '../nodes'
+import { d, Nodes, NodeWithLoc, Location, NodeType } from '../../nodes/src'
 import { createError } from './create-error'
 import { TokenReader } from './token-reader'
 
-import { isToken } from '../utils/token'
+import { isToken } from '../../utils/src/token'
 import { parseStmt } from './statement/index'
 import { parseCompound } from './compound'
-import { buildDebug } from '../utils/debug'
-import { buildProgram } from '../nodes/builders.gen'
+import { buildDebug } from '../../utils/src/debug'
+import { buildProgram } from '../../nodes/src/builders.gen'
 
 const debug = buildDebug('parser')
 

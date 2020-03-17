@@ -1,4 +1,4 @@
-import { BaseNode } from './nodes'
+import { BaseNode } from './nodes/src'
 
 export const hydrate = (raw: string): BaseNode =>
   JSON.parse(raw, (_, value) => {

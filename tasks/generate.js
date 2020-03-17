@@ -23,17 +23,17 @@ const project = new Project({
   // Read more: https://ts-morph.com/setup/
 })
 
-project.addSourceFileAtPath(path.resolve('core/nodes/defs.ts'))
+project.addSourceFileAtPath(path.resolve('core/nodes/src/defs.ts'))
 
 const definitionsFile = project.getSourceFileOrThrow(
-  path.resolve('core/nodes/defs.ts')
+  path.resolve('core/nodes/src/defs.ts')
 )
 
 const defs = definitionsFile.getInterfaces()
 const aliases = definitionsFile.getTypeAliases()
 
 const buildersFile = project.createSourceFile(
-  'core/nodes/builders.gen.ts',
+  'core/nodes/src/builders.gen.ts',
   {},
   {
     overwrite: true,
@@ -108,7 +108,7 @@ buildersFile.applyTextChanges([
 ])
 
 const nodesFile = project.createSourceFile(
-  'core/nodes/nodes.gen.ts',
+  'core/nodes/src/nodes.gen.ts',
   {},
   {
     overwrite: true,

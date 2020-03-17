@@ -11,7 +11,7 @@ import debug from 'debug'
 import { optionParser, CliOptions } from './options'
 import * as utils from './utils'
 
-import { parse, transformFile } from '..'
+import { parse, transformFile } from '../..'
 
 // const pipeline = promisify(stream.pipeline)
 const writeFile = fs.promises ? fs.promises.writeFile : promisify(fs.writeFile)

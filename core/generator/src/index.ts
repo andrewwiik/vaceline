@@ -1,5 +1,5 @@
 import { printer, PrinterOptions } from 'prettier/doc'
-import { Node } from '../nodes/defs'
+import { Node } from '../../nodes/src/defs'
 
 export type GenerateOptions = {} & PrinterOptions
 

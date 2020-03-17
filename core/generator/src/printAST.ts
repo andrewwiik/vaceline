@@ -1,5 +1,5 @@
 import { Doc, builders as b } from 'prettier/doc'
-import { d, BaseNode } from '../nodes'
+import { d, BaseNode } from '../../nodes/src'
 
 export interface State {
   lineNum: number

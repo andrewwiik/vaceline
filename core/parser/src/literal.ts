@@ -1,9 +1,9 @@
-import { d, b, Location, NodeWithLoc } from '../nodes'
+import { d, b, Location, NodeWithLoc } from '../../nodes/src'
 
 import { Token } from './tokenizer'
 import { createError } from './create-error'
-import { Parser } from '../parser'
-import { isToken } from '../utils/token'
+import { Parser } from '../../parser/src'
+import { isToken } from '../../utils/src/token'
 import { parseIp } from './statement/ip'
 
 export const parseLiteral = (

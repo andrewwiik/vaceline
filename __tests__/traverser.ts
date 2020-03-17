@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import fs from 'fs'
 import path from 'path'
-import { traverse, createPathArray } from '../core/traverser'
+import { traverse, createPathArray } from '../core/traverser/src'
 import { parse } from '../core'
-import { d, BaseNode } from '../core/nodes'
-import { NodePath } from '../core/traverser/path'
+import { d, BaseNode } from '../core/nodes/src'
+import { NodePath } from '../core/traverser/src/path'
 
 describe('Traverser', () => {
   const codePath = path.resolve('__tests__/__fixture__/rough.vcl')
