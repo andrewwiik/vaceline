@@ -379,6 +379,24 @@ export function buildSetStatement(
   return node
 }
 
+export function buildNewStatement(
+  left: d.Identifier | d.Member,
+  right: d.Expression,
+  operator: string,
+  loc?: Location
+): NodeWithLoc<d.NewStatement> {
+  const node = Object.create(BaseNode.prototype) as NodeWithLoc<d.NewStatement>
+
+  node.type = 'NewStatement'
+  node.loc = loc || buildEmptryLocation()
+
+  node.left = left
+  node.right = right
+  node.operator = operator
+
+  return node
+}
+
 export function buildUnsetStatement(
   id: d.Identifier | d.Member,
   loc?: Location
@@ -397,6 +415,7 @@ export function buildUnsetStatement(
 
 export function buildReturnStatement(
   action: d.ReturnActionName,
+  args: Array<d.Expression>,
   loc?: Location
 ): NodeWithLoc<d.ReturnStatement> {
   const node = Object.create(BaseNode.prototype) as NodeWithLoc<
@@ -407,6 +426,7 @@ export function buildReturnStatement(
   node.loc = loc || buildEmptryLocation()
 
   node.action = action
+  node.args = args
 
   return node
 }
@@ -542,6 +562,24 @@ export function buildBackendDefinition(
   return node
 }
 
+export function buildProbeDefinition(
+  key: string,
+  value: d.Expression | Array<d.ProbeDefinition>,
+  loc?: Location
+): NodeWithLoc<d.ProbeDefinition> {
+  const node = Object.create(BaseNode.prototype) as NodeWithLoc<
+    d.ProbeDefinition
+  >
+
+  node.type = 'ProbeDefinition'
+  node.loc = loc || buildEmptryLocation()
+
+  node.key = key
+  node.value = value
+
+  return node
+}
+
 export function buildBackendStatement(
   id: d.Identifier,
   body: Array<d.BackendDefinition>,
@@ -552,6 +590,24 @@ export function buildBackendStatement(
   >
 
   node.type = 'BackendStatement'
+  node.loc = loc || buildEmptryLocation()
+
+  node.id = id
+  node.body = body
+
+  return node
+}
+
+export function buildProbeStatement(
+  id: d.Identifier,
+  body: Array<d.ProbeDefinition | d.ProbeDefinition>,
+  loc?: Location
+): NodeWithLoc<d.ProbeStatement> {
+  const node = Object.create(BaseNode.prototype) as NodeWithLoc<
+    d.ProbeStatement
+  >
+
+  node.type = 'ProbeStatement'
   node.loc = loc || buildEmptryLocation()
 
   node.id = id
@@ -592,6 +648,24 @@ export function buildTableStatement(
 
   node.id = id
   node.body = body
+
+  return node
+}
+
+export function buildArgumentDefinition(
+  value: d.Expression,
+  loc: Location,
+  key?: NodeWithLoc<d.Identifier>
+): NodeWithLoc<d.ArgumentDefinition> {
+  const node = Object.create(BaseNode.prototype) as NodeWithLoc<
+    d.ArgumentDefinition
+  >
+
+  node.type = 'ArgumentDefinition'
+  node.loc = loc || buildEmptryLocation()
+
+  node.key = key
+  node.value = value
 
   return node
 }

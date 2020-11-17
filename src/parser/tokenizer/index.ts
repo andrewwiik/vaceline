@@ -34,7 +34,7 @@ const splitters = [
   /* tabs           */ /\t+/,
   /* newline        */ '\n',
   /* line comment   */ /#[^\n]*|\/\/[^\n]*/,
-  /* inline comment */ /\/\*[\s\S]*\*\//,
+  /* inline comment */ /(\/\*[\s\S]*\*\/|\/\*[\s\S]*?\*\/)/,
   /* string         */ /"[^\n]*?"/,
   /* multiline str  */ /{"[\s\S]*?"}/,
   /* ident          */ /[A-z][A-z\d-_]*/,
@@ -111,6 +111,13 @@ export class Tokenizer {
 
       if ((matchers.symbols as Set<string>).has(str)) {
         type = 'symbol'
+      } else if (/^(#|\/\/|\/\*|\/\*)/.test(str)) {
+        type = 'comment'
+        if (/^(\/\*)/.test(str)) {
+          const lines = str.split('\n')
+          line += lines.length - 1
+          column = lines[lines.length - 1].length - (str.length - 1)
+        }
       } else if ((matchers.operators as Set<string>).has(str)) {
         type = 'operator'
       } else if (/^(true|false)$/.test(str)) {
@@ -131,8 +138,6 @@ export class Tokenizer {
         column = lines[lines.length - 1].length - (str.length - 1)
       } else if (/^[\d.]+$/.test(str)) {
         type = 'numeric'
-      } else if (/^(#|\/\/|\/\*)/.test(str)) {
-        type = 'comment'
       } else {
         type = 'ident'
 

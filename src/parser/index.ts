@@ -57,7 +57,6 @@ export class Parser extends TokenReader {
 
     if (debug.enabled) {
       const log = { ...node }
-      delete log.loc
       debug(log)
     }
 

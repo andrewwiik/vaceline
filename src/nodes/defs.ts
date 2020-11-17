@@ -6,6 +6,7 @@ export type Statement =
   | AclStatement
   | AddStatement
   | BackendStatement
+  | ProbeStatement
   | CallStatement
   | DeclareStatement
   | ErrorStatement
@@ -21,6 +22,7 @@ export type Statement =
   | SyntheticStatement
   | TableStatement
   | UnsetStatement
+  | NewStatement
 
 export type Expression =
   | Literal
@@ -35,6 +37,8 @@ export type Expression =
   | ValuePair
   | BackendDefinition
   | TableDefinition
+  | ArgumentDefinition
+  | ProbeDefinition
 
 export type Literal =
   | BooleanLiteral
@@ -180,6 +184,13 @@ export interface SetStatement extends BaseNode {
   operator: string
 }
 
+export interface NewStatement extends BaseNode {
+  type: 'NewStatement'
+  left: Identifier | Member
+  right: Expression
+  operator: string
+}
+
 export interface UnsetStatement extends BaseNode {
   type: 'UnsetStatement'
   id: Identifier | Member
@@ -195,6 +206,7 @@ export type ReturnActionName =
 export interface ReturnStatement extends BaseNode {
   type: 'ReturnStatement'
   action: ReturnActionName
+  args: Array<Expression>
 }
 
 export interface ErrorStatement extends BaseNode {
@@ -242,10 +254,22 @@ export interface BackendDefinition extends BaseNode {
   value: Expression | Array<BackendDefinition>
 }
 
+export interface ProbeDefinition extends BaseNode {
+  type: 'ProbeDefinition'
+  key: string
+  value: Expression | Array<ProbeDefinition>
+}
+
 export interface BackendStatement extends BaseNode {
   type: 'BackendStatement'
   id: Identifier
   body: Array<BackendDefinition>
+}
+
+export interface ProbeStatement extends BaseNode {
+  type: 'ProbeStatement'
+  id: Identifier
+  body: Array<ProbeDefinition | ProbeDefinition>
 }
 
 export interface TableDefinition extends BaseNode {
@@ -258,4 +282,10 @@ export interface TableStatement extends BaseNode {
   type: 'TableStatement'
   id: Identifier
   body: Array<TableDefinition>
+}
+
+export interface ArgumentDefinition extends BaseNode {
+  type: 'ArgumentDefinition'
+  key?: Identifier | ValuePair | Member
+  value: Expression
 }

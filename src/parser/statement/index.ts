@@ -38,6 +38,16 @@ export const parseStmt = (p: Parser, token: Token = p.read()): d.Statement => {
     return p.finishNode(builder(left, right, operator, loc))
   }
 
+  if (token.value === 'new') {
+    const left = p.validateNode(parseExpr(p), 'Identifier', 'Member')
+    const operator = p.validateToken(p.read(), 'operator').value
+    const right = parseExpr(p)
+
+    ensureSemi(p)
+
+    return p.finishNode(b.buildNewStatement(left, right, operator, loc))
+  }
+
   if (token.value === 'unset') {
     const id = p.validateNode(parseExpr(p), 'Identifier', 'Member')
 
@@ -89,12 +99,16 @@ export const parseStmt = (p: Parser, token: Token = p.read()): d.Statement => {
 
   if (token.value === 'return') {
     let returnActionToken: Token
-
+    let args: Array<d.Expression> = []
     // `()` can be skipped
     if (isToken(p.peek(), 'symbol', '(')) {
       p.take()
 
       returnActionToken = p.read()
+      if (isToken(p.peek(), 'symbol', '(')) {
+        p.take()
+        args = parseCompound(p, parseExpr, ')', ',')
+      }
 
       p.validateToken(p.read(), 'symbol', ')')
     } else {
@@ -115,7 +129,7 @@ export const parseStmt = (p: Parser, token: Token = p.read()): d.Statement => {
 
     ensureSemi(p)
 
-    return p.finishNode(b.buildReturnStatement(action, loc))
+    return p.finishNode(b.buildReturnStatement(action, args, loc))
   }
 
   if (token.value === 'error') {
@@ -189,6 +203,16 @@ export const parseStmt = (p: Parser, token: Token = p.read()): d.Statement => {
     return p.finishNode(b.buildBackendStatement(id, body, loc))
   }
 
+  if (token.value === 'probe') {
+    const id = p.validateNode(parseExpr(p, p.read(), true), 'Identifier')
+
+    p.validateToken(p.read(), 'symbol', '{')
+
+    const body = parseCompound(p, parseProbeDef, '}')
+
+    return p.finishNode(b.buildProbeStatement(id, body, loc))
+  }
+
   if (token.value === 'table') {
     return parseTableStatement(p, loc)
   }
@@ -214,6 +238,26 @@ const parseBackendDef = (p: Parser, token = p.read()): d.BackendDefinition => {
   }
 
   return p.finishNode(b.buildBackendDefinition(key, value, loc))
+}
+
+const parseProbeDef = (p: Parser, token = p.read()): d.ProbeDefinition => {
+  const loc = p.startNode()
+
+  p.validateToken(token, 'symbol', '.')
+  const key = p.validateNode(parseExpr(p), 'Identifier').name
+  p.validateToken(p.read(), 'operator', '=')
+
+  let value
+
+  if (isToken(p.peek(), 'symbol', '{')) {
+    p.take()
+    value = parseCompound(p, parseProbeDef, '}')
+  } else {
+    value = parseExpr(p)
+    ensureSemi(p)
+  }
+
+  return p.finishNode(b.buildProbeDefinition(key, value, loc))
 }
 
 const parseIfStatement = (p: Parser, loc: Location): d.IfStatement => {

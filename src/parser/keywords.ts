@@ -5,6 +5,7 @@ export const topLevelKeywords = new Set([
   'acl',
   'backend',
   'table',
+  'probe',
 ])
 
 export const keywords = new Set([
@@ -22,6 +23,7 @@ export const keywords = new Set([
   'restart',
   'synthetic',
   'log',
+  'new',
   'if',
   'else',
   ...topLevelKeywords,
@@ -38,6 +40,8 @@ export const returnActions = new Set([
   'synth',
   'purge',
   'lookup',
+  'miss',
+  'ok',
 
   // Fastly
   'deliver_stale',

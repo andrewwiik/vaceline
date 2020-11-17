@@ -20,6 +20,8 @@ export const printNode = (
       return printAddStatement(node, state, options)
     case 'BackendStatement':
       return printBackendStatement(node, state, options)
+    case 'ProbeStatement':
+      return printProbeStatement(node, state, options)
     case 'CallStatement':
       return printCallStatement(node, state, options)
     case 'DeclareStatement':
@@ -42,6 +44,8 @@ export const printNode = (
       return printReturnStatement(node, state, options)
     case 'SetStatement':
       return printSetStatement(node, state, options)
+    case 'NewStatement':
+      return printNewStatement(node, state, options)
     case 'SubroutineStatement':
       return printSubroutineStatement(node, state, options)
     case 'SyntheticStatement':
@@ -84,8 +88,12 @@ export const printNode = (
       return printValuePair(node, state, options)
     case 'BackendDefinition':
       return printBackendDefinition(node, state, options)
+    case 'ProbeDefinition':
+      return printProbeDefinition(node, state, options)
     case 'TableDefinition':
       return printTableDefinition(node, state, options)
+    case 'ArgumentDefinition':
+      return printArgumentDefinition(node, state, options)
   }
 }
 
@@ -248,7 +256,7 @@ export const printConcatExpression = base((node: d.ConcatExpression, state) => {
   return b.group(
     b.indent(
       b.join(
-        b.line,
+        b.concat([' +', b.line]),
         node.body.map((n) => n.print(state))
       )
     )
@@ -351,6 +359,22 @@ export const printSetStatement = base((node: d.SetStatement, state) => {
     b.indent(
       b.concat([
         'set ',
+        node.left.print(state, { neverBreak: true }),
+        ' ',
+        node.operator,
+        b.line,
+        node.right.print(state, { neverBreak: true }),
+        ';',
+      ])
+    )
+  )
+})
+
+export const printNewStatement = base((node: d.NewStatement, state) => {
+  return b.group(
+    b.indent(
+      b.concat([
+        'new ',
         node.left.print(state, { neverBreak: true }),
         ' ',
         node.operator,
@@ -497,6 +521,29 @@ export const printBackendDefinition: PrinterFunc<d.BackendDefinition> = base(
   }
 )
 
+export const printProbeDefinition: PrinterFunc<d.ProbeDefinition> = base(
+  (node: d.ProbeDefinition, state) => {
+    const printedValue: Doc = Array.isArray(node.value)
+      ? b.concat([
+          '{',
+          b.indent(
+            b.concat([
+              b.hardline,
+              b.join(
+                b.hardline,
+                node.value.map((v) => printProbeDefinition(v, state))
+              ),
+            ])
+          ),
+          b.hardline,
+          '}',
+        ])
+      : b.concat([node.value.print(state), ';'])
+
+    return b.concat(['.', node.key, ' = ', printedValue])
+  }
+)
+
 export const printBackendStatement = base((node: d.BackendStatement, state) => {
   return b.concat([
     'backend ',
@@ -510,6 +557,28 @@ export const printBackendStatement = base((node: d.BackendStatement, state) => {
           b.join(
             b.hardline,
             node.body.map((d) => printBackendDefinition(d, state))
+          ),
+        ])
+      ),
+      b.hardline,
+      '}',
+    ]),
+  ])
+})
+
+export const printProbeStatement = base((node: d.ProbeStatement, state) => {
+  return b.concat([
+    'probe ',
+    printIdentifier(node.id, state),
+    ' ',
+    b.concat([
+      '{',
+      b.indent(
+        b.concat([
+          b.hardline,
+          b.join(
+            b.hardline,
+            node.body.map((d) => printProbeDefinition(d, state))
           ),
         ])
       ),
@@ -543,3 +612,12 @@ export const printTableStatement = base((node: d.TableStatement, state) => {
     '}',
   ])
 })
+
+export const printArgumentDefinition = base(
+  (node: d.ArgumentDefinition, state) => {
+    return b.concat([
+      node.key != undefined ? node.key.name + '=' : '',
+      node.value.print(state),
+    ])
+  }
+)

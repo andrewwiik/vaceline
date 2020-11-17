@@ -24,6 +24,7 @@ export interface Nodes {
   DeclareStatement: d.DeclareStatement
   AddStatement: d.AddStatement
   SetStatement: d.SetStatement
+  NewStatement: d.NewStatement
   UnsetStatement: d.UnsetStatement
   ReturnStatement: d.ReturnStatement
   ErrorStatement: d.ErrorStatement
@@ -34,7 +35,10 @@ export interface Nodes {
   SubroutineStatement: d.SubroutineStatement
   AclStatement: d.AclStatement
   BackendDefinition: d.BackendDefinition
+  ProbeDefinition: d.ProbeDefinition
   BackendStatement: d.BackendStatement
+  ProbeStatement: d.ProbeStatement
   TableDefinition: d.TableDefinition
   TableStatement: d.TableStatement
+  ArgumentDefinition: d.ArgumentDefinition
 }

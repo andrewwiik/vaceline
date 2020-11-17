@@ -4,7 +4,7 @@ import { Token } from '../tokenizer'
 import { isToken } from '../../utils/token'
 import { createError } from '../create-error'
 import { parseLiteral } from '../literal'
-import { parseExpr } from '.'
+import { parseExpr, parseArgExpr } from '.'
 import { parseCompound } from '../compound'
 import { parseIdentifier } from './identifier'
 
@@ -22,8 +22,7 @@ export const parseHumbleExpr = (
 
     if (isToken(p.peek(), 'symbol', '(')) {
       p.take()
-
-      const args = parseCompound(p, parseExpr, ')', ',')
+      const args = parseCompound(p, parseArgExpr, ')', ',')
 
       return p.finishNode(b.buildFunCallExpression(ident, args, loc))
     }
