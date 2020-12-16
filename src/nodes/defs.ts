@@ -1,4 +1,5 @@
 import { BaseNode } from './node'
+import { NodeWithLoc } from '../nodes'
 
 export type Node = Program | Statement | Expression
 
@@ -14,6 +15,7 @@ export type Statement =
   | IfStatement
   | ImportStatement
   | IncludeStatement
+  | VCLVersionStatement
   | LogStatement
   | RestartStatement
   | ReturnStatement
@@ -46,6 +48,7 @@ export type Literal =
   | MultilineLiteral
   | NumericLiteral
   | StringLiteral
+  | OperatorLiteral
   | Ip
 
 export interface Program extends BaseNode {
@@ -60,6 +63,11 @@ export interface BooleanLiteral extends BaseNode {
 
 export interface StringLiteral extends BaseNode {
   type: 'StringLiteral'
+  value: string
+}
+
+export interface OperatorLiteral extends BaseNode {
+  type: 'OperatorLiteral'
   value: string
 }
 
@@ -86,6 +94,7 @@ export interface Identifier extends BaseNode {
 export interface Ip extends BaseNode {
   type: 'Ip'
   value: string
+  allowed: boolean
   cidr?: number
 }
 
@@ -147,9 +156,15 @@ export interface IncludeStatement extends BaseNode {
   module: StringLiteral
 }
 
+export interface VCLVersionStatement extends BaseNode {
+  type: 'VCLVersionStatement'
+  version: NumericLiteral
+}
+
 export interface ImportStatement extends BaseNode {
   type: 'ImportStatement'
   module: Identifier
+  path: StringLiteral | undefined
 }
 
 export interface CallStatement extends BaseNode {
@@ -286,6 +301,6 @@ export interface TableStatement extends BaseNode {
 
 export interface ArgumentDefinition extends BaseNode {
   type: 'ArgumentDefinition'
-  key?: Identifier | ValuePair | Member
   value: Expression
+  key: NodeWithLoc<Identifier> | undefined
 }

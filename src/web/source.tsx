@@ -34,7 +34,7 @@ export const SourcePanel: ComponentType<{
   }, [source])
 
   return (
-    <div id="source" class="container">
+    <div id="source" class="">
       <h2 class="subtitle">source</h2>
       <textarea
         ref={ref}

@@ -5,9 +5,10 @@ import { Token } from '../tokenizer'
 import { Parser } from '..'
 import { parseOperatorExpr } from './operator'
 import { parseHumbleExpr } from './humble'
-import { parseIdentifier } from './identifier'
+import { parseArgumentIdentifier } from './identifier'
 
 // import { buildDebug } from '../../utils/debug'
+import { Identifier, ValuePair } from '../../nodes/defs'
 // const debug = buildDebug('parser', 'expression')
 
 export interface Stack<T> {
@@ -20,10 +21,15 @@ export interface Stack<T> {
 export const parseExpr = (
   p: Parser,
   token: Token = p.read(),
-  shortcut = false
+  shortcut = false,
+  operatorSkipGrouping = false
 ): NodeWithLoc<d.Expression> => {
-  const expr = parseOperatorExpr(p, token)
-
+  const expr = parseOperatorExpr(
+    p,
+    token,
+    operatorSkipGrouping,
+    operatorSkipGrouping
+  )
   if (shortcut) return expr
 
   const loc = p.startNode()
@@ -34,9 +40,10 @@ export const parseExpr = (
 
   let backup = p.getCursor()
 
-  const buf = [expr]
+  const buf: Array<NodeWithLoc<d.Expression> | d.OperatorLiteral> = [expr]
 
   let nextToken = p.peek()
+  let operatorToken = undefined
 
   while (nextToken) {
     p.take()
@@ -46,11 +53,20 @@ export const parseExpr = (
     }
 
     if (isToken(nextToken, 'symbol', '+')) {
+      operatorToken = nextToken
+      nextToken = p.read()
+    }
+
+    if (isToken(nextToken, 'symbol', '-')) {
+      operatorToken = nextToken
       nextToken = p.read()
     }
 
     try {
       const expr = parseHumbleExpr(p, nextToken)
+      if (operatorToken) {
+        buf.push(b.buildOperatorLiteral(operatorToken.value, operatorToken.loc))
+      }
       buf.push(expr)
       backup = p.getCursor()
     } catch (err) {
@@ -79,7 +95,7 @@ export const parseArgExpr = (
   p: Parser,
   token: Token = p.read()
 ): NodeWithLoc<d.Expression> => {
-  let ident = undefined
+  let ident: NodeWithLoc<Identifier> | undefined = undefined
   let expr = undefined
 
   const loc = p.startNode()
@@ -87,7 +103,7 @@ export const parseArgExpr = (
   const peeked = p.peek()
 
   if (isToken(peeked, 'operator', '=')) {
-    ident = parseIdentifier(p, token)
+    ident = parseArgumentIdentifier(p, token)
     p.validateToken(p.read(), 'operator', '=')
     expr = parseExpr(p, p.read(), true)
   } else {
@@ -122,6 +138,10 @@ export const parseArgExpr = (
       nextToken = p.read()
     }
 
+    if (isToken(nextToken, 'symbol', '-')) {
+      nextToken = p.read()
+    }
+
     try {
       const expr = parseHumbleExpr(p, nextToken)
       buf.push(expr)
@@ -142,9 +162,9 @@ export const parseArgExpr = (
 
   // the next token wasn't an expression
   if (buf.length === 1) {
-    return p.finishNode(b.buildArgumentDefinition(expr, loc, ident))
+    return p.finishNode(b.buildArgumentDefinition(expr, ident, loc))
   }
   return p.finishNode(
-    b.buildArgumentDefinition(b.buildConcatExpression(buf, loc), loc, ident)
+    b.buildArgumentDefinition(b.buildConcatExpression(buf, loc), ident, loc)
   )
 }

@@ -10,6 +10,7 @@ const transpile = async (source) => {
     const { parse, traverse, generate } = await import('../lib')
 
     const ast = parse(source)
+    // console.log(JSON.stringify(ast, null, 2));
     const { code } = generate(ast)
 
     return { type: 'success', code, ast }

@@ -25,6 +25,12 @@ export const parseStmt = (p: Parser, token: Token = p.read()): d.Statement => {
     return p.finishNode(b.buildExpressionStatement(body, loc))
   }
 
+  if (token.value === 'vcl') {
+    const version = p.validateNode(parseExpr(p), 'NumericLiteral')
+    ensureSemi(p)
+    return p.finishNode(b.buildVCLVersionStatement(version, loc))
+  }
+
   if (token.value === 'set' || token.value === 'add') {
     const left = p.validateNode(parseExpr(p), 'Identifier', 'Member')
     const operator = p.validateToken(p.read(), 'operator').value
@@ -65,11 +71,19 @@ export const parseStmt = (p: Parser, token: Token = p.read()): d.Statement => {
   }
 
   if (token.value === 'import') {
-    const module = p.validateNode(parseExpr(p), 'Identifier')
+    const module = p.validateNode(parseIdentifier(p, p.read()), 'Identifier')
+
+    if (isToken(p.peek(), 'ident', 'from')) {
+      p.take()
+      const path = p.validateNode(parseExpr(p), 'StringLiteral')
+      ensureSemi(p)
+
+      return p.finishNode(b.buildImportStatement(module, path, loc))
+    }
 
     ensureSemi(p)
 
-    return p.finishNode(b.buildImportStatement(module, loc))
+    return p.finishNode(b.buildImportStatement(module, undefined, loc))
   }
 
   if (token.value === 'call') {
@@ -275,7 +289,7 @@ const parseIfStatement = (p: Parser, loc: Location): d.IfStatement => {
 
   const next = p.peek()
 
-  if (isToken(next, 'ident', /elsif|elseif/)) {
+  if (isToken(next, 'ident', /elsif|elseif|elif/)) {
     p.take()
     alternative = parseIfStatement(p, p.startNode())
   } else if (isToken(next, 'ident', 'else')) {

@@ -26,7 +26,7 @@ export const ResultPanel: ComponentType<{ result: Result | null }> = ({
     .join(' ')
 
   return (
-    <div id="result" class="container">
+    <div id="result" class="">
       <h2 class="subtitle">result</h2>
       <textarea
         class={className}

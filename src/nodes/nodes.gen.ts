@@ -4,6 +4,7 @@ export interface Nodes {
   Program: d.Program
   BooleanLiteral: d.BooleanLiteral
   StringLiteral: d.StringLiteral
+  OperatorLiteral: d.OperatorLiteral
   MultilineLiteral: d.MultilineLiteral
   DurationLiteral: d.DurationLiteral
   NumericLiteral: d.NumericLiteral
@@ -19,6 +20,7 @@ export interface Nodes {
   LogicalExpression: d.LogicalExpression
   ExpressionStatement: d.ExpressionStatement
   IncludeStatement: d.IncludeStatement
+  VCLVersionStatement: d.VCLVersionStatement
   ImportStatement: d.ImportStatement
   CallStatement: d.CallStatement
   DeclareStatement: d.DeclareStatement

@@ -2,6 +2,7 @@ export const binary = new Set(['==', '!=', '>=', '>', '<=', '<', '~', '!~'])
 export const unary = new Set(['!'])
 export const logical = new Set(['||', '&&'])
 export const assign = new Set(['=', '*=', '+=', '-=', '/=', '||=', '&&='])
+export const grouping = new Set(['-', '+'])
 
 export const operators = new Set([...binary, ...unary, ...logical, ...assign])
 

@@ -6,6 +6,7 @@ export const topLevelKeywords = new Set([
   'backend',
   'table',
   'probe',
+  'vcl',
 ])
 
 export const keywords = new Set([
@@ -42,6 +43,8 @@ export const returnActions = new Set([
   'lookup',
   'miss',
   'ok',
+  'abandon',
+  'fail',
 
   // Fastly
   'deliver_stale',

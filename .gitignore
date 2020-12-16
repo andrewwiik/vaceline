@@ -4,3 +4,4 @@ coverage
 /dist
 /public/dist
 /sandbox
+.vscode/bookmarks.json

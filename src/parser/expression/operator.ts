@@ -5,12 +5,15 @@ import * as ops from '../tokenizer/operators'
 import { Token } from '../tokenizer'
 import { isToken } from '../../utils/token'
 import { parseHumbleExpr } from './humble'
+import { parseExpr } from './index'
 
 export const parseOperatorExpr = (
   p: Parser,
   token: Token = p.read(),
-  shortcut = false
+  shortcut = false,
+  skipGrouping = false
 ): NodeWithLoc<d.Expression> => {
+  let groupBackup = p.getCursor() - 1
   const expr = parseHumbleExpr(p, token)
 
   if (shortcut) return expr
@@ -19,7 +22,6 @@ export const parseOperatorExpr = (
     return expr
   }
 
-  // let node = p.startNode()
   let backup = p.getCursor()
 
   type OperatorToken = Token & {
@@ -36,23 +38,33 @@ export const parseOperatorExpr = (
   while ((op = p.peek() as OperatorToken | null)) {
     const isBinary = ops.binary.has(op.value)
     const isLogical = !isBinary && ops.logical.has(op.value)
+    const isGrouping =
+      skipGrouping === true ? false : ops.grouping.has(op.value)
 
-    if (!isBinary && !isLogical) break
+    if (!isBinary && !isLogical && !isGrouping) break
 
     p.take()
 
     op.precedence = ops.getPrecedence(op.value)
     op.isBinary = isBinary
-
-    while (op.precedence >= (opStack[opStack.length - 1] || {}).precedence) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      rpn.push(opStack.pop()!)
+    if (!isGrouping) {
+      while (op.precedence >= (opStack[opStack.length - 1] || {}).precedence) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        rpn.push(opStack.pop()!)
+      }
+      opStack.push(op)
+    } else {
+      rpn.pop()
     }
 
-    opStack.push(op)
-
     try {
-      rpn.push(parseHumbleExpr(p))
+      if (isGrouping) {
+        p.jumpTo(groupBackup)
+        rpn.push(parseExpr(p, undefined, false, true))
+        groupBackup = p.getCursor() + 1
+      } else {
+        rpn.push(parseHumbleExpr(p))
+      }
     } catch (err) {
       if (err instanceof SyntaxError) {
         p.jumpTo(backup)
@@ -68,7 +80,6 @@ export const parseOperatorExpr = (
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     rpn.push(opStack.pop()!)
   }
-
   // calculate rpn
   const stack: Stack<NodeWithLoc<d.Expression>> = []
 

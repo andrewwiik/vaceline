@@ -45,6 +45,22 @@ export function buildStringLiteral(
   return node
 }
 
+export function buildOperatorLiteral(
+  value: string,
+  loc?: Location
+): NodeWithLoc<d.OperatorLiteral> {
+  const node = Object.create(BaseNode.prototype) as NodeWithLoc<
+    d.OperatorLiteral
+  >
+
+  node.type = 'OperatorLiteral'
+  node.loc = loc || buildEmptryLocation()
+
+  node.value = value
+
+  return node
+}
+
 export function buildMultilineLiteral(
   value: string,
   loc?: Location
@@ -109,6 +125,7 @@ export function buildIdentifier(
 
 export function buildIp(
   value: string,
+  allowed: boolean,
   cidr?: number,
   loc?: Location
 ): NodeWithLoc<d.Ip> {
@@ -118,6 +135,7 @@ export function buildIp(
   node.loc = loc || buildEmptryLocation()
 
   node.value = value
+  node.allowed = allowed
   node.cidr = cidr
 
   return node
@@ -295,8 +313,25 @@ export function buildIncludeStatement(
   return node
 }
 
+export function buildVCLVersionStatement(
+  version: d.NumericLiteral,
+  loc?: Location
+): NodeWithLoc<d.VCLVersionStatement> {
+  const node = Object.create(BaseNode.prototype) as NodeWithLoc<
+    d.VCLVersionStatement
+  >
+
+  node.type = 'VCLVersionStatement'
+  node.loc = loc || buildEmptryLocation()
+
+  node.version = version
+
+  return node
+}
+
 export function buildImportStatement(
   module: d.Identifier,
+  path: d.StringLiteral | undefined,
   loc?: Location
 ): NodeWithLoc<d.ImportStatement> {
   const node = Object.create(BaseNode.prototype) as NodeWithLoc<
@@ -307,6 +342,7 @@ export function buildImportStatement(
   node.loc = loc || buildEmptryLocation()
 
   node.module = module
+  node.path = path
 
   return node
 }
@@ -654,8 +690,8 @@ export function buildTableStatement(
 
 export function buildArgumentDefinition(
   value: d.Expression,
-  loc: Location,
-  key?: NodeWithLoc<d.Identifier>
+  key: NodeWithLoc<d.Identifier> | undefined,
+  loc?: Location
 ): NodeWithLoc<d.ArgumentDefinition> {
   const node = Object.create(BaseNode.prototype) as NodeWithLoc<
     d.ArgumentDefinition
@@ -664,8 +700,8 @@ export function buildArgumentDefinition(
   node.type = 'ArgumentDefinition'
   node.loc = loc || buildEmptryLocation()
 
-  node.key = key
   node.value = value
+  node.key = key
 
   return node
 }

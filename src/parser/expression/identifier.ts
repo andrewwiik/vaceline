@@ -49,3 +49,24 @@ export const parseValuePair = (
     end: name.loc.end,
   })
 }
+
+export const parseArgumentIdentifier = (
+  p: Parser,
+  token?: Token,
+  base: NodeWithLoc<d.Identifier> = p.finishNode(
+    b.buildIdentifier((token ?? p.read()).value, p.startNode())
+  )
+): NodeWithLoc<d.Identifier> => {
+  // if (isToken(p.peek(), 'symbol', '.')) {
+  //   p.take()
+  //   return parseIdentifier(p, undefined, parseMember(p, base))
+  // }
+
+  // if (isToken(p.peek(), 'symbol', ':')) {
+  //   p.take()
+  //   // return the expression here because there won't be any recursive pattern
+  //   return parseValuePair(p, base)
+  // }
+
+  return base
+}

@@ -97,7 +97,7 @@ export const optionParser = yargs
       })
       .option('printWidth', {
         type: 'number',
-        default: 80,
+        default: 120,
       })
       .option('tabWidth', {
         type: 'number',
@@ -105,6 +105,6 @@ export const optionParser = yargs
       })
       .option('useTabs', {
         type: 'boolean',
-        default: false,
+        default: true,
       })
   ) as yargs.Argv<CliOptions>

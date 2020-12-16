@@ -34,6 +34,8 @@ export const printNode = (
       return printIfStatement(node, state, options)
     case 'ImportStatement':
       return printImportStatement(node, state, options)
+    case 'VCLVersionStatement':
+      return printVCLVersionStatement(node, state, options)
     case 'IncludeStatement':
       return printIncludeStatement(node, state, options)
     case 'LogStatement':
@@ -94,6 +96,8 @@ export const printNode = (
       return printTableDefinition(node, state, options)
     case 'ArgumentDefinition':
       return printArgumentDefinition(node, state, options)
+    case 'OperatorLiteral':
+      return printOperatorLiteral(node, state, options)
   }
 }
 
@@ -111,11 +115,7 @@ export const printStatements = (
 
   for (const stmt of stmts) {
     if (stmt.loc && stmt.loc.start.line > state.lineNum) {
-      let delta = stmt.loc.start.line - state.lineNum
-      while (delta--) {
-        doc.push(b.hardline)
-      }
-
+      doc.push(b.hardline)
       state.lineNum = stmt.loc.start.line
     }
 
@@ -155,7 +155,14 @@ export const printMultilineLiteral = base((node: d.MultilineLiteral) => {
 })
 
 export const printDurationLiteral = base((node: d.DurationLiteral) => {
-  return node.value
+  return node.value.replace(
+    /(-?)\s*([\d]+[.]?[\d]*)\s*((?:ms|s|m|h|d|y)?)/,
+    '$1$2$3'
+  )
+})
+
+export const printOperatorLiteral = base((node: d.OperatorLiteral) => {
+  return ' ' + node.value + ' '
 })
 
 export const printNumericLiteral = base((node: d.NumericLiteral) => {
@@ -167,7 +174,9 @@ export const printIdentifier = base((node: d.Identifier) => {
 })
 
 export const printIp = base((node: d.Ip) => {
-  return node.cidr ? `"${node.value}"/${node.cidr}` : `"${node.value}"`
+  return node.cidr
+    ? `${node.allowed ? '' : '!'}"${node.value}"/${node.cidr}`
+    : `${node.allowed ? '' : '!'}"${node.value}"`
 })
 
 export const printMember: PrinterFunc<
@@ -255,9 +264,10 @@ export const printFunCallExpression = base(
 export const printConcatExpression = base((node: d.ConcatExpression, state) => {
   return b.group(
     b.indent(
-      b.join(
-        b.concat([' +', b.line]),
-        node.body.map((n) => n.print(state))
+      b.concat(
+        node.body.map((n) =>
+          n.type === 'OperatorLiteral' ? n.print(state) : n.print(state)
+        )
       )
     )
   )
@@ -313,8 +323,29 @@ export const printIncludeStatement = base((node: d.IncludeStatement, state) => {
 })
 
 export const printImportStatement = base((node: d.ImportStatement, state) => {
-  return b.concat(['import ', node.module.print(state), ';'])
+  if (node.path) {
+    return b.concat([
+      'import ',
+      node.module.print(state),
+      ' from ',
+      node.path.print(state),
+      ';',
+    ])
+  } else {
+    return b.concat(['import ', node.module.print(state), ';'])
+  }
 })
+
+export const printVCLVersionStatement = base(
+  (node: d.VCLVersionStatement, state) => {
+    return b.concat([
+      'vcl ',
+      printNumericLiteral(node.version, state),
+      ';',
+      b.hardline,
+    ])
+  }
+)
 
 export const printCallStatement = base((node: d.CallStatement, state) => {
   return b.concat(['call ', node.subroutine.print(state), ';'])
@@ -435,9 +466,7 @@ export const printIfStatement = base((node: d.IfStatement, state) => {
     'if ',
     b.group(
       b.concat([
-        b.indent(
-          b.concat(['(', b.ifBreak(b.hardline, ''), node.test.print(state)])
-        ),
+        b.indent(b.concat(['(', node.test.print(state)])),
         b.ifBreak(b.hardline, ''),
         ') ',
       ])
@@ -483,15 +512,19 @@ export const printAclStatement = base((node: d.AclStatement, state) => {
     printIdentifier(node.id, state),
     ' {',
     b.indent(
-      b.concat([
-        b.hardline,
-        b.join(
-          b.hardline,
-          node.body
-            .map((ip) => printIp(ip, state))
-            .map((doc) => b.concat([doc, ';']))
-        ),
-      ])
+      b.concat(
+        node.body.length > 0
+          ? [
+              b.hardline,
+              b.join(
+                b.hardline,
+                node.body
+                  .map((ip) => printIp(ip, state))
+                  .map((doc) => b.concat([doc, ';']))
+              ),
+            ]
+          : []
+      )
     ),
     b.hardline,
     '}',

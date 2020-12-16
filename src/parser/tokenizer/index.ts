@@ -15,6 +15,7 @@ export type TokenType =
   | 'string'
   | 'numeric'
   | 'boolean'
+  | 'operator-or-negative'
 
 export interface Token {
   type: TokenType
@@ -22,7 +23,7 @@ export interface Token {
   loc: Location
 }
 
-const symbols = [';', ':', '.', ',', '/', '{', '}', '(', ')', '+'] as const
+const symbols = [';', ':', '.', ',', '/', '{', '}', '(', ')', '+', '-'] as const
 
 const escapeRegExp = (s: string | RegExp) =>
   s instanceof RegExp ? s.source : s.replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&')
@@ -34,13 +35,15 @@ const splitters = [
   /* tabs           */ /\t+/,
   /* newline        */ '\n',
   /* line comment   */ /#[^\n]*|\/\/[^\n]*/,
-  /* inline comment */ /(\/\*[\s\S]*\*\/|\/\*[\s\S]*?\*\/)/,
+  /* inline comment */ /(?:\/\*[\s\S]+?\*\/|\/\*[\s\S]*?\*\/)/,
   /* string         */ /"[^\n]*?"/,
   /* multiline str  */ /{"[\s\S]*?"}/,
-  /* ident          */ /[A-z][A-z\d-_]*/,
-  /* numeric        */ /[\d][\d.]+/,
+  /* stupid         */ /(?:(\.)([A-z\d-_]+))/,
+  /* stupid numeric */ /(?:((?:-?|-\s*)[\d]+[.]?[\d]*)\s*(ms|s|m|h|d|y)?)\s*(-)\s*(?:((?:\s*\(\s*)*)\s*(-?\s*[\d]+[.]?[\d]*)\s*(ms|s|m|h|d|y)?)/,
+  /* numeric        */ /(?:(?<!(?:[\d]|(?:ms|s|m|h|d|y))\s*)-?\s*[\d]+[.]?[\d]*)/,
   ...operators,
   ...symbols,
+  /* ident          */ /[A-z\d-_][A-z\d-_]+/,
 ]
 
 const matchers = {
@@ -49,14 +52,33 @@ const matchers = {
 } as const
 
 const reSplitter = new RegExp('(' + getJoinedRegExp(splitters) + ')')
-
+// console.log(reSplitter);
 export class Tokenizer {
   raw: string
   source: ReadonlyArray<string>
 
   constructor(raw: string /* opts: { keywords?: Array<string> } = {} */) {
     this.raw = raw
-    this.source = raw.split(reSplitter)
+    const sourceTemp = raw.split(reSplitter)
+    const newSource = []
+
+    let cur = 0
+    while (cur < sourceTemp.length) {
+      const str = sourceTemp[cur++]
+      if (str === undefined || str === '') {
+        continue
+      } else if (/^((?:\s*\(\s*)*)$/.test(str)) {
+        newSource.push(
+          ...str
+            .split(/(\()|( +)|(\t+)|(\n)/)
+            .filter((val) => val != undefined && val !== '')
+        )
+      } else {
+        newSource.push(str)
+      }
+    }
+
+    this.source = newSource
 
     if (debugRaw.enabled) {
       debugRaw(this.source.filter((t) => !/^\s*$/.test(t)))
@@ -136,12 +158,20 @@ export class Tokenizer {
         const lines = str.split('\n')
         line += lines.length - 1
         column = lines[lines.length - 1].length - (str.length - 1)
-      } else if (/^[\d.]+$/.test(str)) {
+      } else if (
+        /^(?:((?:-?|-\s*)[\d]+[.]?[\d]*)\s*(ms|s|m|h|d|y)?)\s*(-)\s*(?:((?:\s*\(\s*)*)\s*(-?\s*[\d]+[.]?[\d]*)\s*(ms|s|m|h|d|y)?)$/.test(
+          str
+        )
+      ) {
+        continue
+      } else if (/^(?:(\.)([A-z\d-_]+))$/.test(str)) {
+        continue
+      } else if (/^-?\s*[\d.]+$/.test(str)) {
         type = 'numeric'
       } else {
         type = 'ident'
 
-        if (!/^[A-Za-z][A-Za-z\d.-_]*/.test(str)) {
+        if (!/^[A-z\d-_]+/.test(str)) {
           err = 'invalid token'
         }
       }

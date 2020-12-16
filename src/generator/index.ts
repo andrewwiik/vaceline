@@ -4,9 +4,9 @@ import { Node } from '../nodes/defs'
 export type GenerateOptions = {} & PrinterOptions
 
 const defaultGenerateOptions: GenerateOptions = {
-  printWidth: 100,
+  printWidth: 10000,
   tabWidth: 2,
-  useTabs: false,
+  useTabs: true,
 }
 
 export const generate = (

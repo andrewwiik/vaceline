@@ -8,6 +8,11 @@ export const parseIp = (p: Parser, token = p.read()) => {
   // TODO: We can know what Ip addresses look like and detect them
   // so it should be parsed not as StringLiteral even outside of AclStatement
 
+  let allowed = true
+  if (token.value == '!') {
+    allowed = false
+    token = p.read()
+  }
   const str = p.validateToken(token, 'string')
   const value = str.value.slice(1, -1) // strip quotes
   const loc = p.startNode()
@@ -55,5 +60,5 @@ export const parseIp = (p: Parser, token = p.read()) => {
     }
   }
 
-  return p.finishNode(b.buildIp(value, cidr, loc))
+  return p.finishNode(b.buildIp(value, allowed, cidr, loc))
 }
